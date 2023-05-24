@@ -1,53 +1,170 @@
-.App {
-  text-align: center;
+input {
+  border-radius: 5px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+
+/* Register */
+
+.personalInfoForm {
+  width: 900px
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.personalInfo {
+  font-size: 1.4em;
+  border-bottom: 1px solid black;
+  padding: 10px;
+  position: relative;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.nameDetails {
+  display: flex;
+  justify-content: space-between;
+}
+
+.inputClass {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.inputClass>input {
+  padding: 10px;
+  width: 30em;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
+.emailInput {
+  padding: 10px;
+  width: 66em;
 }
 
-
-.navbar {
+.passwordDetails {
   display: flex;
-  align-items: center;
-  flex-direction: column;
+  justify-content: space-between;
+}
+
+.loginInfo {
+  font-size: 1.4em;
+  border-bottom: 1px solid black;
+  padding: 10px;
+  position: relative;
+}
+
+.personalInfoForm>button {
+  padding: 15px;
+  margin-top: 2em;
+  background-color: #f14d54;
+  border: none;
+  border-radius: 3px;
+  color: aliceblue;
+}
+
+.personalInfoForm>button:hover {
   background-color: white;
+  color: #f14d54;
+  border: 1px solid #f14d54;
+  cursor: pointer;
 }
 
-.nav {
-  padding: 0.5%;
-  text-decoration: none;
+/* Login */
+
+.login {
+  display: flex;
+  justify-content: space-between;
+}
+
+.login>div>p {
+  font-size: 1.4em;
+  border-bottom: 1px solid black;
+  padding: 10px;
+}
+
+.loginButton {
+  padding: 15px;
+  margin-top: 2em;
+  background-color: #f14d54;
+  border: none;
+  border-radius: 3px;
+  color: aliceblue;
+}
+
+.loginButton:hover {
+  background-color: white;
+  color: #f14d54;
+  border: 1px solid #f14d54;
+  cursor: pointer;
+}
+
+.loginForm {
+  width: 900px;
+}
+
+.loginInput {
+  display: flex;
+  flex-direction: column;
+}
+
+.loginInput>input {
+  padding: 10px;
+  width: 30em;
+}
+
+@media only screen and (max-width: 950px) {
+
+  /* login */
+  .loginContainer {
+    padding: 15px;
+  }
+
+  .login {
+    display: flex;
+    flex-direction: column;
+
+  }
+
+  .loginButton {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .loginForm {
+    width: 100%;
+  }
+
+  .loginInput>input {
+    padding: 10px;
+    width: 90%;
+  }
+
+  /* Register */
+  .personalInfoForm {
+    width: 100%;
+    padding: 2px
+  }
+
+  .passwordDetails {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nameDetails {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .emailInput {
+    padding: 10px;
+    width: 90%;
+  }
+
+  .inputClass>input {
+    padding: 10px;
+    width: 90%;
+  }
+
+  .registerContainer {
+    padding: 15px;
+  }
+
+
 
 }

@@ -1,9 +1,12 @@
 import "./App.css";
 import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
+import { useState } from "react";
+
 import About from "./Components/About.js";
 import Contact from "./Components/Contact.js";
 import NotFound from "./Components/NotFound.js";
 import Home from "./Components/Home";
+import Register from "./Components/Register";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -12,11 +15,9 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useState } from "react";
-import { click } from "@testing-library/user-event/dist/click";
 
-import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Login from "./Components/Login";
 
 const darkTheme = createTheme({
     palette: {
@@ -31,6 +32,7 @@ function App() {
         setIsOpen(!isOpen);
         console.log(isOpen);
     };
+
     return (
         <ThemeProvider theme={darkTheme}>
             <div>
@@ -53,9 +55,19 @@ function App() {
                                     component="div"
                                     sx={{ flexGrow: 1 }}
                                 >
-                                    News
+                                    BooksStore
                                 </Typography>
-                                <Button color="inherit">Login</Button>
+                                <Button color="inherit">
+                                    <Link
+                                        to={"/login"}
+                                        style={{
+                                            color: "white",
+                                            textDecoration: "none",
+                                        }}
+                                    >
+                                        Login
+                                    </Link>
+                                </Button>
                             </Toolbar>
                         </AppBar>
                     </Box>
@@ -93,11 +105,33 @@ function App() {
                                     <Link to={"/contact"}>Contact</Link>
                                 </Typography>
                             </div>
+                            <div className="nav">
+                                <Typography
+                                    variant="h6"
+                                    component="div"
+                                    padding="normal"
+                                    sx={{ flexGrow: 1 }}
+                                >
+                                    <Link to={"/login"}>Login</Link>
+                                </Typography>
+                            </div>
+                            <div className="nav">
+                                <Typography
+                                    variant="h6"
+                                    component="div"
+                                    padding="normal"
+                                    sx={{ flexGrow: 1 }}
+                                >
+                                    <Link to={"/register"}>Register</Link>
+                                </Typography>
+                            </div>
                         </div>
                     )}
 
                     <Routes>
                         <Route path="/about" element={<About />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
                         <Route path="/contact" element={<Contact />} />
                         <Route path="/" element={<Home />} />
                         <Route path="*" element={<NotFound />} />
