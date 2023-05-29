@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
-import "../App.css";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { Grid, Paper } from "@mui/material";
 import Posts from "./Posts";
+import { Context } from "../index.js";
+import { Navigate } from "react-router-dom";
+import "../App.css";
+
+import { Grid, Paper } from "@mui/material";
 import styled from "@emotion/styled";
 
 export const URL = "https://jsonplaceholder.typicode.com/posts";
@@ -19,6 +22,8 @@ const Home = () => {
     const [post, setPost] = useState([]);
     const [error, setError] = useState("");
 
+    const { isAuthenticated, setIsAuthenticated, user, setUser } =
+        useContext(Context);
     useEffect(() => {
         const fetchPost = async () => {
             await axios
@@ -32,6 +37,10 @@ const Home = () => {
         };
         fetchPost();
     }, []);
+    if (isAuthenticated === false) {
+        console.log(isAuthenticated);
+        return <Navigate to={"/login"} />;
+    }
 
     if (error) {
         return (
@@ -40,10 +49,12 @@ const Home = () => {
             </>
         );
     }
+
     return (
         <>
             <div>
                 <header>
+                    <center> Hello {isAuthenticated} </center>
                     <h1>
                         <center> POST </center>
                     </h1>

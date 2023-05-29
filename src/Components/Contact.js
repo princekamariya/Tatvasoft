@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "../App.css";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import { Context } from "../index.js";
 
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -11,7 +12,12 @@ const Contact = () => {
     const [email, setEmail] = useState("");
     const [msg, setMsg] = useState("");
     const navigate = useNavigate();
-
+    const { isAuthenticated, setIsAuthenticated, user, setUser } =
+        useContext(Context);
+    if (isAuthenticated === false) {
+        console.log(isAuthenticated);
+        return <Navigate to={"/login"} />;
+    }
     const handleMsg = (e) => {
         console.log(e.target.value);
         setMsg(e.target.value);
@@ -31,6 +37,7 @@ const Contact = () => {
         console.log(`Name: ${name} Email: ${email} Msg: ${msg}`);
         navigate("/");
     };
+
     return (
         <div className="App">
             <header className="App-header">

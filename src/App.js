@@ -1,6 +1,6 @@
 import "./App.css";
 import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import About from "./Components/About.js";
 import Contact from "./Components/Contact.js";
@@ -18,6 +18,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Login from "./Components/Login";
+import { Context } from "./index.js";
 
 const darkTheme = createTheme({
     palette: {
@@ -27,6 +28,9 @@ const darkTheme = createTheme({
 
 function App() {
     const [isOpen, setIsOpen] = useState(false);
+
+    const { isAuthenticated, setIsAuthenticated, user, setUser } =
+        useContext(Context);
     const handleClick = () => {
         console.log("click");
         setIsOpen(!isOpen);
@@ -58,15 +62,26 @@ function App() {
                                     BooksStore
                                 </Typography>
                                 <Button color="inherit">
-                                    <Link
-                                        to={"/login"}
-                                        style={{
-                                            color: "white",
-                                            textDecoration: "none",
-                                        }}
-                                    >
-                                        Login
-                                    </Link>
+                                    {isAuthenticated === false ? (
+                                        <Link
+                                            to={"/login"}
+                                            style={{
+                                                color: "white",
+                                                textDecoration: "none",
+                                            }}
+                                        >
+                                            Login
+                                        </Link>
+                                    ) : (
+                                        <Button
+                                            onClick={() => {
+                                                setIsAuthenticated(false);
+                                                setUser({});
+                                            }}
+                                        >
+                                            Logout
+                                        </Button>
+                                    )}
                                 </Button>
                             </Toolbar>
                         </AppBar>
