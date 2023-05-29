@@ -8,10 +8,10 @@ import "../App.css";
 import { Grid, Paper } from "@mui/material";
 import styled from "@emotion/styled";
 
-export const URL = "https://jsonplaceholder.typicode.com/posts";
+const baseURL = "https://book-e-sell-node-api.vercel.app";
 
 const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+    backgroundColor: theme.palette.mode === "light" ? "#1A2027" : "#fff",
     ...theme.typography.body2,
     padding: theme.spacing(1),
     textAlign: "center",
@@ -19,17 +19,18 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Home = () => {
-    const [post, setPost] = useState([]);
+    const [books, setBooks] = useState([]);
     const [error, setError] = useState("");
 
     const { isAuthenticated, setIsAuthenticated, user, setUser } =
         useContext(Context);
+
     useEffect(() => {
         const fetchPost = async () => {
             await axios
-                .get(URL)
+                .get(baseURL + "/api/book/all")
                 .then((response) => {
-                    setPost(response.data);
+                    setBooks(response.data.result);
                 })
                 .catch((error) => {
                     setError(error);
@@ -38,7 +39,6 @@ const Home = () => {
         fetchPost();
     }, []);
     if (isAuthenticated === false) {
-        console.log(isAuthenticated);
         return <Navigate to={"/login"} />;
     }
 
@@ -54,19 +54,23 @@ const Home = () => {
         <>
             <div>
                 <header>
-                    <center> Hello {isAuthenticated} </center>
+                    <br />
+                    <center> Hello {user.email} </center>
                     <h1>
-                        <center> POST </center>
+                        <center> Books Listing </center>
                     </h1>
                     <Grid container spacing={3}>
-                        {post.map((p) => {
+                        {books.map((book) => {
                             return (
                                 <Grid item lg={4} md={6} sm={12} spacing={3}>
-                                    <Item>
+                                    <Item alignItems={"flex-start"}>
                                         <Posts
-                                            id={p.id}
-                                            title={p.title}
-                                            body={p.body}
+                                            id={book.id}
+                                            name={book.name}
+                                            category={book.category}
+                                            price={book.price}
+                                            img={book.base64image}
+                                            description={book.description}
                                         />
                                     </Item>
                                 </Grid>
