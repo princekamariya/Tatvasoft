@@ -12,7 +12,7 @@ import React from "react";
 const Posts = (props) => {
     return (
         <div>
-            <Card sx={{ minWidth: 275, backgroundColor: "#fff" }}>
+            <Card sx={{ minWidth: 250, backgroundColor: "#fff" }}>
                 <CardActionArea>
                     <CardMedia
                         component="img"
@@ -20,7 +20,7 @@ const Posts = (props) => {
                         image={props.img}
                         alt="green iguana"
                     />
-                    <CardContent sx={{ textAlign: "left", color:"black" }}>
+                    <CardContent sx={{ textAlign: "left", color: "black" }}>
                         <Typography gutterBottom variant="h5" component="div">
                             {props.name}
                         </Typography>
@@ -37,7 +37,15 @@ const Posts = (props) => {
                     </CardContent>
                 </CardActionArea>
                 <CardActions>
-                    <Button variant="contained" size="large" color="primary">
+                    <Button
+                        variant="contained"
+                        size="large"
+                        color="error"
+                        sx={{
+                            width: "100%",
+                            color: "white",
+                        }}
+                    >
                         Add to Cart
                     </Button>
                 </CardActions>

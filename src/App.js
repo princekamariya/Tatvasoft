@@ -42,7 +42,10 @@ function App() {
             <div>
                 <BrowserRouter>
                     <Box sx={{ flexGrow: 1 }}>
-                        <AppBar position="static">
+                        <AppBar
+                            position="static"
+                            sx={{ backgroundColor: "#fff" }}
+                        >
                             <Toolbar>
                                 <IconButton
                                     size="large"
@@ -52,12 +55,13 @@ function App() {
                                     sx={{ mr: 2 }}
                                     onClick={handleClick}
                                 >
-                                    <MenuIcon />
+                                    <MenuIcon sx={{ color: "black" }} />
                                 </IconButton>
+                                <img src="" alt="" />
                                 <Typography
                                     variant="h6"
                                     component="div"
-                                    sx={{ flexGrow: 1 }}
+                                    sx={{ flexGrow: 1, color: "black" }}
                                 >
                                     BooksStore
                                 </Typography>
@@ -74,6 +78,8 @@ function App() {
                                         </Link>
                                     ) : (
                                         <Button
+                                            sx={{ color: "black" }}
+                                            variant="outlined"
                                             onClick={() => {
                                                 setIsAuthenticated(false);
                                                 setUser({});
