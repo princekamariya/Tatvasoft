@@ -28,6 +28,18 @@ const Home = () => {
     const { isAuthenticated, setIsAuthenticated, user, setUser } =
         useContext(Context);
 
+    const fetchBooks = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.get(baseURL + "/api/book/all");
+            setBooks(response.data.result);
+            setLoading(false);
+        } catch (error) {
+            setError(error.message);
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
         const fetchPost = async () => {
             setLoading(true);
@@ -38,7 +50,7 @@ const Home = () => {
                     if (searchBook.length > 0) {
                         var filteredBooks = [];
                         if (searchBook.length > 0) {
-                            filteredBooks = books.filter(book =>
+                            filteredBooks = books.filter((book) =>
                                 book.name.includes(searchBook)
                             );
                         }
@@ -53,6 +65,10 @@ const Home = () => {
         };
         fetchPost();
     }, [searchBook]);
+
+    useEffect(() => {
+        fetchBooks();
+    }, []);
 
     const handleSearch = (e) => {
         setSearchBook(e.target.value);

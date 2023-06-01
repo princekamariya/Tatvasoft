@@ -7,6 +7,7 @@ import Contact from "./Components/Contact.js";
 import NotFound from "./Components/NotFound.js";
 import Home from "./Components/Home";
 import Register from "./Components/Register";
+import AddBook from "./Components/AddBook.js";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -113,6 +114,16 @@ function App() {
                                     padding="normal"
                                     sx={{ flexGrow: 1 }}
                                 >
+                                    <Link to={"/add"}>Add a Book</Link>
+                                </Typography>
+                            </div>
+                            <div className="nav">
+                                <Typography
+                                    variant="h6"
+                                    component="div"
+                                    padding="normal"
+                                    sx={{ flexGrow: 1 }}
+                                >
                                     <Link to={"/about"}>About</Link>
                                 </Typography>
                             </div>
@@ -154,6 +165,7 @@ function App() {
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
                         <Route path="/contact" element={<Contact />} />
+                        <Route path="/add" element={<AddBook />} />
                         <Route path="/" element={<Home />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>

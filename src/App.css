@@ -199,5 +199,51 @@ input {
 .nav {
   padding: 5px;
   padding-left: 10px;
-  
+
+}
+
+/* AddBook.js */
+.addForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+label {
+  display: block;
+}
+
+.addFormInput {
+  width: 25em;
+  padding: 15px;
+}
+
+.addFormInputImage {
+  width: 25em;
+  padding: 15px;
+  color: #444;
+  padding: 5px;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #555;
+}
+
+.addFormInputImage::file-selector-button {
+  margin-right: 20px;
+  border: none;
+  background: #FF101B;
+  padding: 10px 20px;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: background .2s ease-in-out;
+}
+
+.addFormInputImage::file-selector-button:hover {
+  background: #a52026;
+}
+
+.addBookHeading {
+  border-bottom: 1px solid #FF101B;
+  padding: 2px;
 }
