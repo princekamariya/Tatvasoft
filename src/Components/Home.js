@@ -94,10 +94,20 @@ const Home = () => {
             <div>
                 <header>
                     <br />
-                    <center> Hello {user.email} </center>
-                    <h1>
-                        <center> Books Listing </center>
-                    </h1>
+                    <center> Hello {user.id} </center>
+                    <h3 style={{ textAlign: "center" }}>
+                        <center
+                            style={{
+                                display: "inline-block",
+                                padding: "10px",
+                                fontSize: "35px",
+                                textAlign: "center",
+                                borderBottom: "3px solid #FF101B",
+                            }}
+                        >
+                            Book Listing
+                        </center>
+                    </h3>
                     <div className="search">
                         <h2>Total- {books.length} items</h2>
                         <input

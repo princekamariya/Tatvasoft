@@ -38,9 +38,8 @@ const Login = () => {
                 toast.success("Login Successfully");
                 setError("");
                 setIsAuthenticated(true);
-                setUser({
-                    email: email,
-                });
+                console.log(response.data.result);
+                setUser(response.data.result);
             })
             .catch((e) => {
                 console.log(e);

@@ -1,30 +1,20 @@
-import { BorderColor } from "@mui/icons-material";
-import {
-    Button,
-    FormControl,
-    FormHelperText,
-    Input,
-    InputLabel,
-    TextField,
-    ThemeProvider,
-    createTheme,
-} from "@mui/material";
-import axios from "axios";
 import React, { useContext, useState } from "react";
-import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Context } from "../index.js";
-import { Navigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import axios from "axios";
+import { Button } from "@mui/material";
 
 const baseURL = "https://book-e-sell-node-api.vercel.app";
 
-const AddBook = () => {
+const EditBook = () => {
     const navigate = useNavigate();
-    const [bookName, setBookName] = useState("");
-    const [price, setPrice] = useState(0);
-    const [file, setFile] = useState();
-    const [category, setCategory] = useState(2);
-    const [description, setDescription] = useState("");
+    const location = useLocation();
+    const [bookName, setBookName] = useState(location.state.name);
+    const [price, setPrice] = useState(location.state.price);
+    const [file, setFile] = useState("");
+    const [category, setCategory] = useState(location.state.categoryId);
+    const [description, setDescription] = useState(location.state.description);
 
     const { isAuthenticated, setIsAuthenticated, user, setUser } =
         useContext(Context);
@@ -36,6 +26,10 @@ const AddBook = () => {
     const handleImageChange = (e) => {
         const selectedFile = e.target.files[0];
         setFile(selectedFile);
+    };
+
+    const handleCancel = () => {
+        navigate("/admin");
     };
 
     const handleSubmit = async (e) => {
@@ -52,7 +46,8 @@ const AddBook = () => {
             const base64Image = fileReader.result;
 
             try {
-                const response = await axios.post(baseURL + "/api/book", {
+                const response = await axios.put(baseURL + "/api/book", {
+                    id: location.state.id,
                     name: bookName,
                     description: description,
                     price: price,
@@ -60,25 +55,26 @@ const AddBook = () => {
                     base64image: base64Image,
                 });
 
-                toast.success("Book Added Successfully");
+                toast.success("Book Details Updated Successfully");
                 console.log(response);
             } catch (error) {
                 if (error.response && error.response.status === 409) {
-                    toast.error("Book already exists.");
+                    toast.error(
+                        "Some Problem in Updating Book Details ! Please Try Again."
+                    );
                 } else {
-                    toast.error("Error adding book. Please try again.");
+                    toast.error(
+                        "Some Problem in Updating Book Details ! Please Try Again."
+                    );
                 }
                 console.error(error);
             }
         };
 
         fileReader.readAsDataURL(file);
-        navigate("/");
+        navigate("/admin");
     };
 
-    if (isAuthenticated === false) {
-        return <Navigate to={"/login"} />;
-    }
     return (
         <div>
             <span className="addBookHeading">
@@ -93,7 +89,7 @@ const AddBook = () => {
                             borderBottom: "3px solid #FF101B",
                         }}
                     >
-                        Add Book
+                        Edit Book
                     </center>
                 </h3>
             </span>
@@ -106,6 +102,7 @@ const AddBook = () => {
                             type="text"
                             id="name"
                             onChange={handleName}
+                            value={bookName}
                         />
                         <br /> <br />
                         <label htmlFor="price">Book Price: </label>
@@ -114,6 +111,7 @@ const AddBook = () => {
                             className="addFormInput"
                             id="price"
                             onChange={(e) => setPrice(e.target.value)}
+                            value={price}
                         />
                     </div>
                     <br />
@@ -124,6 +122,7 @@ const AddBook = () => {
                             type="text"
                             id="category"
                             onChange={(e) => setCategory(e.target.value)}
+                            value={category}
                         />
                         <br /> <br />
                         <input
@@ -140,17 +139,28 @@ const AddBook = () => {
                             className="addFormInput"
                             type="text"
                             id="description"
-                            onChange={(e) => setDescription(e.target.value)}
+                            value={description}
                         />
-                    </div>{" "}
+                    </div>
                     <br />
                     <Button
                         variant="contained"
                         size="large"
-                        color="error"
+                        color="success"
                         type="submit"
+                        sx={{ color: "white" }}
                     >
-                        Add
+                        Save
+                    </Button>{" "}
+                    &nbsp;
+                    <Button
+                        variant="contained"
+                        onClick={handleCancel}
+                        size="large"
+                        color="error"
+                        sx={{ color: "white" }}
+                    >
+                        Cancel
                     </Button>
                 </form>
             </div>
@@ -158,4 +168,4 @@ const AddBook = () => {
     );
 };
 
-export default AddBook;
+export default EditBook;
