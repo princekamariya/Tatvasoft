@@ -105,7 +105,7 @@ function App() {
                                     <BsFillCartCheckFill size={25} />
                                     &nbsp;
                                     <p style={{ color: "#F13A41" }}>
-                                        <b>0</b>
+                                        {/* <b>0</b> */}
                                     </p>
                                     &nbsp;
                                     <p>Cart</p>

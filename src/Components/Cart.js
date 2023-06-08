@@ -4,32 +4,57 @@ import CartItem from "./CartItem.js";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const baseURL = "https://book-e-sell-node-api.vercel.app";
 
 const Cart = () => {
+    const navigate = useNavigate();
     const { isAuthenticated, setIsAuthenticated, user, setUser } =
         useContext(Context);
     const [items, setItems] = useState([]);
-
+    const [order, setOrder] = useState([]);
+    const fetchItem = async () => {
+        await axios
+            .get(baseURL + "/api/cart?userId=" + user.id)
+            .then((response) => {
+                setItems(response.data.result);
+            })
+            .catch((error) => {
+                toast.error(error);
+            });
+        let arr = [];
+        items.forEach((item) => {
+            arr.push(item.id);
+        });
+        setOrder(arr);
+    };
     useEffect(() => {
-        const fetchItem = async () => {
-            await axios
-                .get(baseURL + "/api/cart?userId=" + user.id)
-                .then((response) => {
-                    setItems(response.data.result);
-                })
-                .catch((error) => {
-                    toast.error(error);
-                });
-        };
         fetchItem();
     }, []);
+
+    const handlePlaceOrder = () => {
+        const orders = {
+            userId: user.id,
+            cartIds: order,
+        };
+
+        axios
+            .post(baseURL + "/api/order", orders)
+            .then((response) => {
+                toast.success("Order Placed Successfully");
+                setOrder([]);
+                setItems([]);
+                navigate("/");
+            })
+            .catch((e) => {
+                toast.error("Something Went wrong! Please try again");
+            });
+    };
 
     const findTotal = () => {
         let sum = 0;
         items.forEach((item) => {
-            console.log("hello");
             sum = sum + item.book.price * item.quantity;
         });
         return sum;
@@ -56,23 +81,30 @@ const Cart = () => {
                     <p>
                         <b> My Shopping Bag({items.length} Items)</b>
                     </p>
-                    {items.length > 0 && <p>
-                        <b> Total price: {findTotal()} ₹ </b>
-                    </p>}
+                    {items.length > 0 && (
+                        <p>
+                            <b> Total price: {findTotal()} ₹ </b>
+                        </p>
+                    )}
                 </div>
             </div>
             <div>
                 {items.map((item) => {
                     return (
                         <>
-                            <CartItem item={item} /> <br />
+                            <CartItem item={item} fetchItem={fetchItem} />{" "}
+                            <br />
                         </>
                     );
                 })}
             </div>
             <div className="placeOrderButtonOuter">
                 <div className="placeOrderButton">
-                    <Button variant="contained" color="error">
+                    <Button
+                        variant="contained"
+                        color="error"
+                        onClick={handlePlaceOrder}
+                    >
                         Place order
                     </Button>
                 </div>

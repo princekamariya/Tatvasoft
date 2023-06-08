@@ -1,20 +1,60 @@
 import React from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const baseURL = "https://book-e-sell-node-api.vercel.app";
 
 const CartItem = (props) => {
-    const handleDelete = async (e, id) => {
+    const navigate = useNavigate();
+    const handleDelete = async (id) => {
         await axios
             .delete(baseURL + `/api/cart?id=${id}`)
             .then((response) => {
                 toast.success("Book Removed From Cart");
+                props.fetchItem();
             })
             .catch((error) => {
                 toast.error(`Some Problem while Removing From Cart: ${error}`);
                 console.log(error);
             });
+    };
+
+    const handleMinus = async (item) => {
+        if (item.quantity === 1) {
+            toast.error("item quantity should not be zero");
+            return;
+        }
+        const book = {
+            id: item.id,
+            bookId: item.bookId,
+            userId: item.userId,
+            quantity: item.quantity - 1,
+        };
+        try {
+            const response = await axios.put(baseURL + "/api/cart", book);
+            props.fetchItem();
+            console.log(response);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleAdd = async (item) => {
+        const book = {
+            id: item.id,
+            bookId: item.bookId,
+            userId: item.userId,
+            quantity: item.quantity + 1,
+        };
+        try {
+            const response = await axios.put(baseURL + "/api/cart", book);
+            props.fetchItem();
+            console.log(response);
+        } catch (error) {
+            console.error(error);
+        }
     };
     return (
         <div className="cartItemContainer">
@@ -37,13 +77,21 @@ const CartItem = (props) => {
                     </div>
                     <div className="cartItemInnerdiv2">
                         <div className="counter">
-                            <button>+</button>
+                            <button onClick={() => handleAdd(props.item)}>
+                                +
+                            </button>
                             <p>{props.item.quantity}</p>
-                            <button>-</button>
+                            <button onClick={() => handleMinus(props.item)}>
+                                -
+                            </button>
                         </div>
-                        <a onClick={() => handleDelete(props.item.id)}>
+                        <Button
+                            color="error"
+                            onClick={() => handleDelete(props.item.id)}
+                            variant="text"
+                        >
                             Remove
-                        </a>
+                        </Button>
                     </div>
                 </div>
             </div>
