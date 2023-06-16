@@ -1,21 +1,25 @@
 import { Flex, Text } from "@chakra-ui/react";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
 import { Navigate, useNavigate } from "react-router-dom";
-import { Context } from "../index.js";
+
+import { useDispatch } from "react-redux";
+import { updateUser } from "../Store/userSlice.js";
+import { updateAuthenticatedState } from "../Store/authenticatedSlice.js";
+import { useSelector } from "react-redux";
 
 const baseURL = "https://book-e-sell-node-api.vercel.app";
 
 const Login = () => {
+    const authenticated = useSelector((state) => state.isAuthenticated);
+
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-
-    const { isAuthenticated, setIsAuthenticated, user, setUser } =
-        useContext(Context);
 
     const handleEmail = (e) => {
         setEmail(e.target.value);
@@ -37,19 +41,19 @@ const Login = () => {
             .then((response) => {
                 toast.success("Login Successfully");
                 setError("");
-                setIsAuthenticated(true);
                 console.log(response.data.result);
-                setUser(response.data.result);
+                dispatch(updateUser(response.data.result));
+                dispatch(updateAuthenticatedState(true));
             })
             .catch((e) => {
                 console.log(e);
                 setError(e);
-                setIsAuthenticated(false);
-                setUser({});
+                dispatch(updateUser({}));
+                dispatch(updateAuthenticatedState(false));
                 toast.error("Something Went wrong! Please Check it once");
             });
     };
-    if (isAuthenticated === true) {
+    if (authenticated === true) {
         return <Navigate to={"/"} />;
     }
     return (

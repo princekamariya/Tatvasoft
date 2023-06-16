@@ -1,22 +1,23 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Context } from "../index.js";
+import React, { useEffect, useState } from "react";
 import CartItem from "./CartItem.js";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
+import { useSelector } from "react-redux";
+
 const baseURL = "https://book-e-sell-node-api.vercel.app";
 
 const Cart = () => {
     const navigate = useNavigate();
-    const { isAuthenticated, setIsAuthenticated, user, setUser } =
-        useContext(Context);
+    const currentUser = useSelector((state) => state.user);
+
     const [items, setItems] = useState([]);
     const [order, setOrder] = useState([]);
     const fetchItem = async () => {
         await axios
-            .get(baseURL + "/api/cart?userId=" + user.id)
+            .get(baseURL + "/api/cart?userId=" + currentUser.id)
             .then((response) => {
                 setItems(response.data.result);
             })
@@ -35,7 +36,7 @@ const Cart = () => {
 
     const handlePlaceOrder = () => {
         const orders = {
-            userId: user.id,
+            userId: currentUser.id,
             cartIds: order,
         };
 

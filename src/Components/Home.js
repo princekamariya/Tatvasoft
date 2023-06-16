@@ -1,13 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Posts from "./Posts";
-import { Context } from "../index.js";
 import { Navigate } from "react-router-dom";
 import "../App.css";
 
 import { Grid, Paper } from "@mui/material";
 import styled from "@emotion/styled";
 import Loader from "./Loader";
+
+import { useSelector } from "react-redux";
 
 const baseURL = "https://book-e-sell-node-api.vercel.app";
 
@@ -20,13 +21,12 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Home = () => {
+    const currentUser = useSelector((state) => state.user);
+    const authenticated = useSelector((state) => state.isAuthenticated);
     const [books, setBooks] = useState([]);
     const [error, setError] = useState("");
     const [searchBook, setSearchBook] = useState("");
     const [loading, setLoading] = useState(true);
-
-    const { isAuthenticated, setIsAuthenticated, user, setUser } =
-        useContext(Context);
 
     const fetchBooks = async () => {
         try {
@@ -38,6 +38,7 @@ const Home = () => {
             setError(error.message);
             setLoading(false);
         }
+        console.log(currentUser);
     };
 
     useEffect(() => {
@@ -75,7 +76,7 @@ const Home = () => {
         console.log(searchBook);
     };
 
-    if (isAuthenticated === false) {
+    if (authenticated === false) {
         return <Navigate to={"/login"} />;
     }
     if (loading === true) {
@@ -94,7 +95,7 @@ const Home = () => {
             <div>
                 <header>
                     <br />
-                    <center> Hello {user.id} </center>
+                    <center> Hello {currentUser.email} </center>
                     <h3 style={{ textAlign: "center" }}>
                         <center
                             style={{

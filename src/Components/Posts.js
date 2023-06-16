@@ -7,22 +7,22 @@ import {
     CardMedia,
     Typography,
 } from "@mui/material";
-import React, { useContext } from "react";
-import { Context } from "../index.js";
+import React from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+
+import { useSelector } from "react-redux";
 
 const baseURL = "https://book-e-sell-node-api.vercel.app";
 
 const Posts = (props) => {
-    const { isAuthenticated, setIsAuthenticated, user, setUser } =
-        useContext(Context);
+    const currentUser = useSelector((state) => state.user);
 
     const handleClick = (book) => {
         axios
             .post(baseURL + "/api/cart", {
                 bookId: book.id,
-                userId: user.id,
+                userId: currentUser.id,
                 quantity: 1,
             })
             .then((response) => {

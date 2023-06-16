@@ -1,24 +1,27 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import "../App.css";
 
 import { Flex, Text, VStack } from "@chakra-ui/react";
-import { Navigate, useNavigate } from "react-router-dom";
-import { Context } from "../index.js";
+import { Navigate } from "react-router-dom";
+
+import { useDispatch } from "react-redux";
+import { updateUser } from "../Store/userSlice.js";
+import { updateAuthenticatedState } from "../Store/authenticatedSlice.js";
+import { useSelector } from "react-redux";
 
 const baseURL = "https://book-e-sell-node-api.vercel.app";
 
 const Register = () => {
-    const navigate = useNavigate();
+    const authenticated = useSelector((state) => state.isAuthenticated);
+
+    const dispatch = useDispatch();
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password1, setPassword1] = useState("");
     const [password2, setPassword2] = useState("");
-
-    const { isAuthenticated, setIsAuthenticated, user, setUser } =
-        useContext(Context);
 
     const handleFirstName = (e) => {
         setFirstName(e.target.value);
@@ -53,18 +56,17 @@ const Register = () => {
                 .then((response) => {
                     toast.success("Registered Successfully");
                     console.log(response);
-                    setUser({
-                        email: response.data.result.email,
-                    });
-                    setIsAuthenticated(true);
+
+                    dispatch(updateUser(response.data.result));
+                    dispatch(updateAuthenticatedState(true));
                 });
         } else {
             toast.error("Your password is not matching");
-            setIsAuthenticated(false);
-            setUser({});
+            dispatch(updateUser({}));
+            dispatch(updateAuthenticatedState(false));
         }
     };
-    if (isAuthenticated === true) {
+    if (authenticated === true) {
         return <Navigate to={"/"} />;
     }
     return (

@@ -1,33 +1,23 @@
-import { BorderColor } from "@mui/icons-material";
-import {
-    Button,
-    FormControl,
-    FormHelperText,
-    Input,
-    InputLabel,
-    TextField,
-    ThemeProvider,
-    createTheme,
-} from "@mui/material";
+import { Button } from "@mui/material";
 import axios from "axios";
 import React, { useContext, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../index.js";
 import { Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const baseURL = "https://book-e-sell-node-api.vercel.app";
 
 const AddBook = () => {
+    const authenticated = useSelector((state) => state.isAuthenticated);
+
     const navigate = useNavigate();
     const [bookName, setBookName] = useState("");
     const [price, setPrice] = useState(0);
     const [file, setFile] = useState();
     const [category, setCategory] = useState(2);
     const [description, setDescription] = useState("");
-
-    const { isAuthenticated, setIsAuthenticated, user, setUser } =
-        useContext(Context);
 
     const handleName = (e) => {
         setBookName(e.target.value);
@@ -76,7 +66,7 @@ const AddBook = () => {
         navigate("/");
     };
 
-    if (isAuthenticated === false) {
+    if (authenticated === false) {
         return <Navigate to={"/login"} />;
     }
     return (

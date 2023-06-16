@@ -1,6 +1,5 @@
 import {
     Button,
-    Paper,
     Table,
     TableBody,
     TableCell,
@@ -22,61 +21,34 @@ const StyledTableCell = styled(TableCell)`
 
 const baseURL = "https://book-e-sell-node-api.vercel.app";
 
-const EditBooks = () => {
+const Users = () => {
     const currentUser = useSelector((state) => state.user);
     const authenticated = useSelector((state) => state.isAuthenticated);
 
     const navigate = useNavigate();
-    const [books, setBooks] = useState([]);
+    const [users, setUsers] = useState([]);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
 
     const handleDelete = async (id) => {
         await axios
-            .delete(baseURL + `/api/book?id=${id}`)
+            .delete(baseURL + `/api/user?id=${id}`)
             .then((response) => {
-                toast.success("Book Deleted Successfully");
-                fetchPost();
+                toast.success("User Deleted Successfully");
+                fetchUsers();
             })
             .catch((error) => {
-                toast.error(`Some Problem while deleting Book: ${error}`);
+                toast.error(`Some Problem while deleting User: ${error}`);
                 console.log(error);
             });
     };
 
-    const handleEdit = async (
-        id,
-        name,
-        description,
-        price,
-        categoryId,
-        base64image
-    ) => {
-        const book = {
-            id: id,
-            name: name,
-            description: description,
-            price: price,
-            categoryId: categoryId,
-            base64image: base64image,
-        };
-        navigate("/editbook", {
-            state: {
-                id: id,
-                name: name,
-                description: description,
-                price: price,
-                categoryId: categoryId,
-                base64image: base64image,
-            },
-        });
-    };
-    const fetchPost = async () => {
+    const fetchUsers = async () => {
         setLoading(true);
         await axios
-            .get(baseURL + "/api/book/all")
+            .get(baseURL + "/api/user/all")
             .then((response) => {
-                setBooks(response.data.result);
+                setUsers(response.data.result);
                 setLoading(false);
             })
             .catch((error) => {
@@ -85,7 +57,7 @@ const EditBooks = () => {
             });
     };
     useEffect(() => {
-        fetchPost();
+        fetchUsers();
     }, []);
 
     if (authenticated === false) {
@@ -110,7 +82,7 @@ const EditBooks = () => {
                         borderBottom: "3px solid #FF101B",
                     }}
                 >
-                    Book Page
+                    User's Page
                 </center>
             </h3>
             <div
@@ -136,7 +108,7 @@ const EditBooks = () => {
                                             fontSize: "20px",
                                         }}
                                     >
-                                        Book Name
+                                        Email
                                     </span>
                                 </StyledTableCell>
                                 <StyledTableCell>
@@ -146,7 +118,7 @@ const EditBooks = () => {
                                             fontSize: "20px",
                                         }}
                                     >
-                                        Price
+                                        First Name
                                     </span>
                                 </StyledTableCell>
                                 <StyledTableCell>
@@ -156,16 +128,16 @@ const EditBooks = () => {
                                             fontSize: "20px",
                                         }}
                                     >
-                                        Category
+                                        Last Name
                                     </span>
                                 </StyledTableCell>
                                 <StyledTableCell align="right"></StyledTableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody sx={{ backgroundColor: "white" }}>
-                            {books.map((book) => (
+                            {users.map((user) => (
                                 <TableRow
-                                    key={book.id}
+                                    key={user.id}
                                     sx={{
                                         "&:last-child td, &:last-child th": {
                                             border: 0,
@@ -178,37 +150,20 @@ const EditBooks = () => {
                                         component="th"
                                         scope="row"
                                     >
-                                        {book.name}
+                                        {user.email}
                                     </StyledTableCell>
                                     <StyledTableCell sx={{ fontSize: "17px" }}>
-                                        {book.price}
+                                        {user.firstName}
                                     </StyledTableCell>
                                     <StyledTableCell sx={{ fontSize: "17px" }}>
-                                        {book.category}
+                                        {user.lastName}
                                     </StyledTableCell>
                                     <StyledTableCell align="right">
                                         <Button
                                             variant="outlined"
-                                            color="success"
-                                            onClick={() =>
-                                                handleEdit(
-                                                    book.id,
-                                                    book.name,
-                                                    book.description,
-                                                    book.price,
-                                                    book.categoryId,
-                                                    book.base64image
-                                                )
-                                            }
-                                        >
-                                            Edit
-                                        </Button>
-                                        &nbsp;
-                                        <Button
-                                            variant="outlined"
                                             color="error"
                                             onClick={() =>
-                                                handleDelete(book.id)
+                                                handleDelete(user.id)
                                             }
                                         >
                                             Delete
@@ -224,4 +179,4 @@ const EditBooks = () => {
     );
 };
 
-export default EditBooks;
+export default Users;

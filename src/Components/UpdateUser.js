@@ -1,23 +1,25 @@
 import { Button } from "@mui/material";
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { Navigate, useNavigate } from "react-router-dom";
-import { Context } from "../index.js";
+
+import { useSelector } from "react-redux";
 
 const baseURL = "https://book-e-sell-node-api.vercel.app";
 
 const UpdateUser = () => {
-    const navigate = useNavigate();
-    const { isAuthenticated, setIsAuthenticated, user, setUser } =
-        useContext(Context);
+    const currentUser = useSelector((state) => state.user);
+    const authenticated = useSelector((state) => state.isAuthenticated);
 
-    const [firstName, setFirstName] = useState(user.firstName);
-    const [lastName, setLastName] = useState(user.lastName);
-    const [email, setEmail] = useState(user.email);
+    const navigate = useNavigate();
+
+    const [firstName, setFirstName] = useState(currentUser.firstName);
+    const [lastName, setLastName] = useState(currentUser.lastName);
+    const [email, setEmail] = useState(currentUser.email);
     const [password, setPassword] = useState("");
 
-    if (isAuthenticated === false) {
+    if (authenticated === false) {
         return <Navigate to={"/login"} />;
     }
 
@@ -25,12 +27,12 @@ const UpdateUser = () => {
         e.preventDefault();
         try {
             const response = await axios.put(baseURL + "/api/user", {
-                id: user.id,
+                id: currentUser.id,
                 email: email,
                 firstName: firstName,
                 lastName: lastName,
-                roleId: user.roleId,
-                role: user.role,
+                roleId: currentUser.roleId,
+                role: currentUser.role,
                 password: password,
             });
 
